@@ -10,11 +10,6 @@
 
   include_once( plugin_dir_path( __FILE__ ) . 'updater.php');
 
-  $updater = new BeyonkUpdater( __FILE__ );
-  $updater->set_username( 'beyonk-adventures' );
-  $updater->set_repository( 'wordpress-plugin' );
-  $updater->initialize();
-
   function create_plugin_settings_page () {
     $page_title = 'Beyonk SDK Settings';
     $menu_title = 'Beyonk SDK';
@@ -80,5 +75,11 @@
         )
     );
   }
+  
   add_filter( 'block_categories', 'beyonk_block_categories', 10, 2 );
+
+  $updater = new BeyonkUpdater( __FILE__ );
+  $updater->set_username( 'beyonk-adventures' );
+  $updater->set_repository( 'wordpress-plugin' );
+  $updater->initialize();
 ?>

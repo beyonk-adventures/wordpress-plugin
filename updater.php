@@ -38,10 +38,16 @@
         $request_uri = sprintf( 'https://api.github.com/repos/%s/%s/releases', $this->username, $this->repository );
 
         if( $this->authorize_token ) {
-            $request_uri = add_query_arg( 'access_token', $this->authorize_token, $request_uri );
-        }        
-
-        $response = json_decode( wp_remote_retrieve_body( wp_remote_get( $request_uri ) ), true );
+          $args = array(
+            "headers" => array(
+                "Authorization" => "token {$this->authorization_token}"
+            )
+          );
+        } else {
+          $args = array();
+        }  
+        
+        $response = json_decode( wp_remote_retrieve_body( wp_remote_get( $request_uri, $args ) ), true );
 
         if( is_array( $response ) ) {
             $response = current( $response );
@@ -102,19 +108,19 @@
     }
 
     public function after_install( $response, $hook_extra, $result ) {
-      global $wp_filesystem; // Get global FS object
+      global $wp_filesystem;
     
-      $install_directory = plugin_dir_path( $this->file ); // Our plugin directory 
-      $wp_filesystem->move( $result['destination'], $install_directory ); // Move files to the plugin dir
-      $result['destination'] = $install_directory; // Set the destination for the rest of the stack
+      $install_directory = plugin_dir_path( $this->file );
+      $wp_filesystem->move( $result['destination'], $install_directory );
+      $result['destination'] = $install_directory;
     
-      if ( $this->active ) { // If it was active
-        activate_plugin( $this->basename ); // Reactivate
+      if ( $this->active ) {
+        activate_plugin( $this->basename );
       }
       return $result;
     }
 
-    public function initialize() {
+    public function initialize () {
       add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'modify_transient' ), 10, 1 );
       add_filter( 'plugins_api', array( $this, 'plugin_popup' ), 10, 3);
       add_filter( 'upgrader_post_install', array( $this, 'after_install' ), 10, 3 );
