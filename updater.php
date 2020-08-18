@@ -101,6 +101,19 @@
       return $result;
     }
 
+    public function after_install( $response, $hook_extra, $result ) {
+      global $wp_filesystem; // Get global FS object
+    
+      $install_directory = plugin_dir_path( $this->file ); // Our plugin directory 
+      $wp_filesystem->move( $result['destination'], $install_directory ); // Move files to the plugin dir
+      $result['destination'] = $install_directory; // Set the destination for the rest of the stack
+    
+      if ( $this->active ) { // If it was active
+        activate_plugin( $this->basename ); // Reactivate
+      }
+      return $result;
+    }
+
     public function initialize() {
       add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'modify_transient' ), 10, 1 );
       add_filter( 'plugins_api', array( $this, 'plugin_popup' ), 10, 3);

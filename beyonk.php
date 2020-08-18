@@ -31,6 +31,10 @@
     add_menu_page( $page_title, $menu_title, $capability, $slug, $callback, $icon, $position );
   }
 
+  function section_callback () {
+    return;
+  }
+
   function theme_colour_callback( $arguments ) {
     echo '<input name="theme_colour" id="theme_colour" type="color" value="' . get_option( 'theme_colour' ) . '" />';
   }

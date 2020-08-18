@@ -4,36 +4,20 @@ wp.blocks.registerBlockType('beyonk/booking-form', {
   category: 'common',
   attributes: {
     theme: { type: 'string' },
-    experienceId: { type: 'string' }
+    experienceId: { type: 'string' },
+    url: { type: 'string' }
   },
   
   edit: function (props) {
+    function updateUrl (event) {
+      props.setAttributes({ url: event.target.value })
+    }
+
     function updateExperience (event) {
-      props.setAttributes({ experienceId: event.target.value })
-    }
-
-    function updateColor (event) {
-      props.setAttributes({ theme: event.target.value })
-    }
-
-    function findExperiences (event) {
-      const title = event.target.value
-      if (title && title.length > 3) {
-        fetch('https://api.qa.beyonk.com/api/v1/adventures?title=' + title)
-        .then(function (res) {
-          return res.json()
-        })
-        .then(function (results) {
-          const dl = document.getElementById('experiences')
-          dl.innerHTML = ''
-          results.adventures.map(function (doc) {
-            var option = document.createElement('option')
-            option.value = doc.id
-            option.innerHTML = doc.title
-            dl.appendChild(option)
-          })
-        })
-      }
+      const url = new URL(props.attributes.url)
+      const pathParts = url.pathname.split('/')
+      const id = pathParts[2]
+      props.setAttributes({ experienceId: id })
     }
 
     return React.createElement(
@@ -47,21 +31,16 @@ wp.blocks.registerBlockType('beyonk/booking-form', {
         'Beyonk Booking Form'
       ),
 
-      React.createElement('div', { class: 'components-placeholder__instructions' }, 'Start typing the title of your experience' ),
+      React.createElement('div', { class: 'components-placeholder__instructions' }, 'Paste the url to your experience' ),
 
       React.createElement('div', { class: 'components-placeholder__fieldset' },
         React.createElement('form', { style: { marginBottom: '12px' } },
-          React.createElement('datalist', { id: 'experiences' }),
-          React.createElement('input', { list: 'experiences', class: 'components-placeholder__input', id: 'byk_content_edit', type: 'text', value: props.attributes.experienceId, onChange: findExperiences, onBlur: updateExperience })
-        )
-      ),
-
-      React.createElement('div', { class: 'components-placeholder__instructions' }, 'Choose the theme colour for your Booking Form' ),
-
-      React.createElement('div', { class: 'components-placeholder__fieldset' },
-        React.createElement('form', { style: { marginBottom: '12px' } },
-          React.createElement('input', { class: 'components-placeholder__input', id: 'byk_content_theme', type: 'color', value: props.attributes.theme, onChange: updateColor })
-        )
+          React.createElement('input', { list: 'experiences', class: 'components-placeholder__input', id: 'byk_url_edit', type: 'url', value: props.attributes.url, onChange: updateUrl }),
+          React.createElement('button', { type: 'button', class: 'components-button is-primary', onClick: updateExperience }, 'Lookup')
+        ),
+        props.attributes.experienceId
+          ? React.createElement('div', { class: 'components-placeholder__learn-more' }, 'Experience: ' + props.attributes.experienceId)
+          : ''
       )
     );
   },
@@ -71,7 +50,7 @@ wp.blocks.registerBlockType('beyonk/booking-form', {
       'iframe',
       {
         scrolling: 'no',
-        src: '//sdk.qa.beyonk.com/b/?event=' + props.attributes.experienceId + '&theme=' + props.attributes.theme.substr(1),
+        src: '//sdk.qa.beyonk.com/b/?event=' + props.attributes.experienceId + '&theme=' + 'aaeebb',
         style: { border: 0, overflow: 'hidden', width: '300px', height: '510px', backgroundColor: 'transparent' },
         title: 'Booking Form'
       }
