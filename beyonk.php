@@ -64,4 +64,21 @@
   }
      
   add_action('enqueue_block_editor_assets', 'beyonk_load_sdk_blocks');
+
+  function beyonk_block_categories( $categories, $post ) {
+    if ( $post->post_type !== 'post' ) {
+        return $categories;
+    }
+    return array_merge(
+        $categories,
+        array(
+            array(
+                'slug' => 'beyonk',
+                'title' => __( 'Beyonk', 'beyonk' ),
+                'icon'  => 'wordpress',
+            ),
+        )
+    );
+  }
+  add_filter( 'block_categories', 'beyonk_block_categories', 10, 2 );
 ?>
