@@ -49,7 +49,19 @@
 
   add_action( 'admin_menu', 'create_plugin_settings_page' );
 
+  function settings_js() {
+    ?>
+      <script type="text/javascript">
+        window.BEYONK = window.BEYONK || {}
+        window.BEYONK.sdk = window.BEYONK.sdk || {}
+        window.BEYONK.sdk.theme = <?php echo json_encode(get_option('theme_colour', '#')); ?>
+      </script>
+    <?php
+  }
+
   function beyonk_load_sdk_blocks() {
+    add_action('wp_print_scripts', 'settings_js');
+
     wp_enqueue_script(
       'beyonk-booking-form',
       plugin_dir_url(__FILE__) . 'booking-form.js',
