@@ -4,7 +4,7 @@
   "description": "Wordpress Plugin for Beyonk",
   "main": "booking-form.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "version": "node ./scripts/update-version.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/beyonk-adventures/wordpress-plugin/issues"
   },
-  "homepage": "https://github.com/beyonk-adventures/wordpress-plugin#readme"
+  "homepage": "https://github.com/beyonk-adventures/wordpress-plugin#readme",
+  "devDependencies": {
+    "regex-replace": "^2.3.1"
+  }
 }
