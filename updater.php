@@ -9,9 +9,11 @@
     private $authorize_token;
     private $github_response;
 
-    public function __construct( $file ) {
+    public function __construct( $file, $username, $repository ) {
       $this->file = $file;
       add_action( 'admin_init', array( $this, 'set_plugin_properties' ) );
+      $this->username = $username;
+      $this->repository = $repository;
       return $this;
     }
 
@@ -21,51 +23,29 @@
       $this->active   = is_plugin_active( $this->basename );
     }
 
-    public function set_username( $username ) {
-      $this->username = $username;
-    }
-
-    public function set_repository( $repository ) {
-      $this->repository = $repository;
-    }
-
-    public function authorize( $token ) {
-      $this->authorize_token = $token;
-    }
-
     private function get_repository_info () {
+      echo "<p>gh resp " .  is_null( $this->github_response ) . "</p>";
       if ( is_null( $this->github_response ) ) {
         $request_uri = sprintf( 'https://api.github.com/repos/%s/%s/releases', $this->username, $this->repository );
 
-        if( $this->authorize_token ) {
-          $args = array(
-            "headers" => array(
-                "Authorization" => "token {$this->authorization_token}"
-            )
-          );
-        } else {
-          $args = array();
-        }  
-        
-        $response = json_decode( wp_remote_retrieve_body( wp_remote_get( $request_uri, $args ) ), true );
+        $response = json_decode( wp_remote_retrieve_body( wp_remote_get( $request_uri ) ), true );
 
         if( is_array( $response ) ) {
             $response = current( $response );
         }
 
-        if( $this->authorize_token ) {
-            $response['zipball_url'] = add_query_arg( 'access_token', $this->authorize_token, $response['zipball_url'] );
-        }
-
+        echo "<p>gh resp " . $response . "</p>";
         $this->github_response = $response;
       }
     }
 
     public function modify_transient( $transient ) {
+      echo "<p>ppppp_prop exists</p>";
       if( property_exists( $transient, 'checked') ) {
         if( $checked = $transient->checked ) {
           $this->get_repository_info();
           $out_of_date = version_compare( $this->github_response['tag_name'], $checked[$this->basename], 'gt' );
+          echo "<p>is out " . $out_of_date . "</p>";
           if( $out_of_date ) {
             $new_files = $this->github_response['zipball_url'];
             $slug = current( explode('/', $this->basename ) );
@@ -122,6 +102,7 @@
 
     public function initialize () {
       add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'modify_transient' ), 10, 1 );
+      echo "<p>next</p>";
       add_filter( 'plugins_api', array( $this, 'plugin_popup' ), 10, 3);
       add_filter( 'upgrader_post_install', array( $this, 'after_install' ), 10, 3 );
     }

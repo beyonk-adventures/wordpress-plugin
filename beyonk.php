@@ -75,11 +75,8 @@
         )
     );
   }
-  
+
   add_filter( 'block_categories', 'beyonk_block_categories', 10, 2 );
 
-  $updater = new BeyonkUpdater( __FILE__ );
-  $updater->set_username( 'beyonk-adventures' );
-  $updater->set_repository( 'wordpress-plugin' );
-  $updater->initialize();
+  $updater = new BeyonkUpdater( __FILE__ , 'beyonk-adventures', 'wordpress-plugin');
 ?>
