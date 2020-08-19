@@ -1,6 +1,6 @@
 {
   "name": "@beyonk/wordpress-plugin",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Wordpress Plugin for Beyonk",
   "main": "booking-form.js",
   "scripts": {
