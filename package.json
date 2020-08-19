@@ -1,10 +1,10 @@
 {
   "name": "@beyonk/wordpress-plugin",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Wordpress Plugin for Beyonk",
   "main": "booking-form.js",
   "scripts": {
-    "version": "node ./scripts/update-version.js && git commit -am 'bump version' beyonk.php"
+    "version": "node ./scripts/update-version.js && git commit -m 'bump version' beyonk.php"
   },
   "repository": {
     "type": "git",

@@ -3,7 +3,7 @@
   * Plugin Name: Beyonk SDK
   * Plugin URI: https://sdk.beyonk.com/
   * Description: Plugin for integrating with the Beyonk Booking Platform
-  * Version: 0.0.6
+  * Version: 0.0.7
   * Author: Antony MacKenzie-Jones
   * Author URI: http://beyonk.com/
   **/
