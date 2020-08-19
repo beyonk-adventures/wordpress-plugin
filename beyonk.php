@@ -9,6 +9,11 @@
   **/
 
   include_once( plugin_dir_path( __FILE__ ) . 'updater.php');
+  include_once( plugin_dir_path( __FILE__ ) . 'woocommerce_plugin.php');
+
+  update_option('delivery_url', 'sdk.qa.beyonk.com');
+  update_option('booking_form_width', '300px');
+  update_option('booking_form_height', '510px');
 
   function create_plugin_settings_page () {
     $page_title = 'Beyonk SDK Settings';
@@ -52,9 +57,12 @@
   function settings_js() {
     ?>
       <script type="text/javascript">
-        window.BEYONK = window.BEYONK || {}
-        window.BEYONK.sdk = window.BEYONK.sdk || {}
-        window.BEYONK.sdk.theme = <?php echo json_encode(get_option('theme_colour', '#')); ?>
+        window.BEYONK = window.BEYONK || {};
+        window.BEYONK.sdk = window.BEYONK.sdk || {};
+        window.BEYONK.sdk.theme = <?php echo json_encode(get_option('theme_colour', '#32B0A2')); ?>;
+        window.BEYONK.sdk.deliveryUrl = <?php echo json_encode(get_option('delivery_url', 'sdk.beyonk.com')); ?>;
+        window.BEYONK.sdk.bookingFormWidth = <?php echo json_encode(get_option('booking_form_width', '300px')); ?>;
+        window.BEYONK.sdk.bookingFormHeight = <?php echo json_encode(get_option('booking_form_height', '510px')); ?>;
       </script>
     <?php
   }

@@ -64,8 +64,8 @@ wp.blocks.registerBlockType('beyonk/booking-form', {
       'iframe',
       {
         scrolling: 'no',
-        src: '//sdk.qa.beyonk.com/b/?event=' + props.attributes.experienceId + '&theme=' + window.BEYONK.sdk.theme.substr(1),
-        style: { border: 0, overflow: 'hidden', width: '300px', height: '510px', backgroundColor: 'transparent' },
+        src: '//' + window.BEYONK.sdk.deliveryUrl + '/b/?event=' + props.attributes.experienceId + '&theme=' + window.BEYONK.sdk.theme.substr(1),
+        style: { border: 0, overflow: 'hidden', width: window.BEYONK.sdk.bookingFormWidth, height: window.BEYONK.sdk.bookingFormHeight, backgroundColor: 'transparent' },
         title: 'Booking Form'
       }
     )
