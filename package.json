@@ -4,7 +4,7 @@
   "description": "Wordpress Plugin for Beyonk",
   "main": "booking-form.js",
   "scripts": {
-    "version": "node ./scripts/update-version.js"
+    "version": "node ./scripts/update-version.js && git commit -am 'bump version' beyonk.php"
   },
   "repository": {
     "type": "git",
