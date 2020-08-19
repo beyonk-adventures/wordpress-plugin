@@ -79,7 +79,6 @@
       public function process_admin_options () {
         parent::process_admin_options();
 
-        echo "<p>" . $this->get_option( 'enabled' ) . "<p>";
         update_option( 'beyonk_woocommerce_enabled', $this->get_option( 'enabled' ) === 'yes' );
       }
   
