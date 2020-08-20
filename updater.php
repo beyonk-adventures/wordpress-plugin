@@ -1,4 +1,4 @@
-<?
+<?php
   class BeyonkUpdater {
     protected $file;
     protected $plugin;
