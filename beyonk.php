@@ -9,12 +9,12 @@
   **/
 
   include_once( plugin_dir_path( __FILE__ ) . 'updater.php');
-  include_once( plugin_dir_path( __FILE__ ) . 'woocommerce_plugin.php');
 
   update_option('delivery_url', 'sdk.qa.beyonk.com');
   update_option('booking_form_width', '300px');
   update_option('booking_form_height', '510px');
 
+  add_action( 'admin_menu', 'create_plugin_settings_page' );
   function create_plugin_settings_page () {
     $page_title = 'Beyonk SDK Settings';
     $menu_title = 'Beyonk SDK';
@@ -52,8 +52,6 @@
     </div> <?php
   }
 
-  add_action( 'admin_menu', 'create_plugin_settings_page' );
-
   function settings_js() {
     ?>
       <script type="text/javascript">
@@ -67,6 +65,7 @@
     <?php
   }
 
+  add_action('enqueue_block_editor_assets', 'beyonk_load_sdk_blocks');
   function beyonk_load_sdk_blocks() {
     add_action('wp_print_scripts', 'settings_js');
 
@@ -77,9 +76,8 @@
       true
     );
   }
-     
-  add_action('enqueue_block_editor_assets', 'beyonk_load_sdk_blocks');
 
+  add_filter( 'block_categories', 'beyonk_block_categories', 10, 2 );
   function beyonk_block_categories( $categories, $post ) {
     if ( $post->post_type !== 'post' ) {
         return $categories;
@@ -96,7 +94,12 @@
     );
   }
 
-  add_filter( 'block_categories', 'beyonk_block_categories', 10, 2 );
+  add_action('plugins_loaded', 'maybe_load_woocommerce_plugin');
+  function maybe_load_woocommerce_plugin () {
+    if (defined('WC_VERSION')) {
+      include_once( plugin_dir_path( __FILE__ ) . 'woocommerce_plugin.php');
+    }
+  }
 
   $updater = new BeyonkUpdater( __FILE__ , 'beyonk-adventures', 'wordpress-plugin');
 ?>

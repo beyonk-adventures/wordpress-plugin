@@ -9,9 +9,17 @@ jobs:
   build:
     name: Create Release
     runs-on: ubuntu-latest
+    env:
+      RELEASE_FILE: beyonk-wordpress-plugin-${{ github.ref }}.zip
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Package plugin
+      - uses: papeloto/action-zip@v1
+        with:
+          files: beyonk.php updater.php woocommerce_plugin.php booking-form.js
+          dest: $RELEASE_FILE
 
       - name: Create Release
         id: create_release
@@ -26,3 +34,14 @@ jobs:
             - Various updates
           draft: false
           prerelease: true
+
+      - name: Upload Plugin Zip
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: $RELEASE_FILE
+          asset_name: $RELEASE_FILE
+          asset_content_type: application/zip
