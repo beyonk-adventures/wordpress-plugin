@@ -51,5 +51,5 @@ You should now see the Booking Form instead of "Add To Cart" button on that prod
  
 == Changelog ==
  
-= 0.0.17 =
+= 0.0.18 =
 * Initial Release
